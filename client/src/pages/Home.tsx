@@ -21,6 +21,9 @@ import {
   Mail,
   Building2,
   Menu,
+  Quote,
+  Star,
+  Award,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -238,6 +241,61 @@ const benefits: Benefit[] = [
     title: "ACCESS TO EXPERTISE",
     description: "Companies can tap into a pool of pre-vetted, experienced workers.",
     icon: <CheckCircle className="w-8 h-8" />,
+  },
+];
+
+interface Testimonial {
+  id: number;
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  industry: string;
+  metrics: { label: string; value: string }[];
+}
+
+const testimonials: Testimonial[] = [
+  {
+    id: 1,
+    quote:
+      "YAVOREN Services delivered 30–50 skilled workers consistently for our Kluang distribution centre. Their workforce management is seamless — payroll, compliance, and on-site supervision handled without any disruption to our operations.",
+    author: "Operations Manager",
+    role: "Logistics & Distribution",
+    company: "Longterm Distribution Sdn. Bhd.",
+    industry: "Warehousing & Distribution",
+    metrics: [
+      { label: "Workers Deployed", value: "30–50" },
+      { label: "Engagement Duration", value: "3+ Years" },
+      { label: "Uptime", value: "99%" },
+    ],
+  },
+  {
+    id: 2,
+    quote:
+      "We engaged YAVOREN for our Maxis network cabling project across three major KL buildings. Their team of 16 technicians completed the works on schedule and to specification. Professional, reliable, and highly recommended.",
+    author: "Project Director",
+    role: "Telecommunications",
+    company: "Asianatics Sdn. Bhd.",
+    industry: "Telecommunications Infrastructure",
+    metrics: [
+      { label: "Technicians Deployed", value: "16" },
+      { label: "Project Sites", value: "3" },
+      { label: "Delivery", value: "On Time" },
+    ],
+  },
+  {
+    id: 3,
+    quote:
+      "YAVOREN supplied 50 line operators, QC staff, and electronic testers for our production facility. The workers were pre-vetted, trained, and ready to contribute from day one. Our production targets were met without compromise.",
+    author: "Plant Manager",
+    role: "Electronics Manufacturing",
+    company: "Nulatex Sdn. Bhd.",
+    industry: "Electronics Manufacturing",
+    metrics: [
+      { label: "Workers Deployed", value: "50" },
+      { label: "Roles Filled", value: "4 Types" },
+      { label: "Productivity", value: "High" },
+    ],
   },
 ];
 
@@ -675,6 +733,7 @@ export default function Home() {
             <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">About</a>
             <a href="#services" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Services</a>
             <a href="#projects" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Projects</a>
+            <a href="#testimonials" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Clients</a>
             <a href="#contact" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Contact</a>
             <a
               href="#contact"
@@ -693,7 +752,7 @@ export default function Home() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3">
-            {["about", "services", "projects", "contact"].map((id) => (
+            {["about", "services", "projects", "testimonials", "contact"].map((id) => (
               <a
                 key={id}
                 href={`#${id}`}
@@ -1059,6 +1118,92 @@ export default function Home() {
                 <p className="text-sm text-teal-100">YOUR PARTNER IN PROGRESS</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials / Case Studies Section */}
+      <section id="testimonials" className="py-16 md:py-24 bg-white">
+        <div className="container">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 bg-[#0E8B8B]/10 text-[#0E8B8B] px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              <Award className="w-4 h-4" />
+              CLIENT SUCCESS STORIES
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-4">
+              Trusted by <span className="text-[#0E8B8B]">Reputable Clients</span>
+            </h2>
+            <p className="text-[#718096] max-w-2xl mx-auto">
+              Real results from real partnerships. Here is what our clients say about working with YAVOREN Services.
+            </p>
+          </div>
+
+          {/* Testimonial Cards */}
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {testimonials.map((t) => (
+              <div
+                key={t.id}
+                className="bg-[#F7FAFC] rounded-2xl p-8 flex flex-col gap-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+              >
+                {/* Stars */}
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+
+                {/* Quote */}
+                <div className="relative">
+                  <Quote className="w-8 h-8 text-[#0E8B8B]/20 absolute -top-1 -left-1" />
+                  <p className="text-[#4A5568] text-sm leading-relaxed pl-6 italic">
+                    {t.quote}
+                  </p>
+                </div>
+
+                {/* Metrics */}
+                <div className="grid grid-cols-3 gap-3 py-4 border-t border-b border-gray-200">
+                  {t.metrics.map((m, i) => (
+                    <div key={i} className="text-center">
+                      <div className="text-lg font-bold text-[#0E8B8B]">{m.value}</div>
+                      <div className="text-xs text-[#718096] mt-0.5 leading-tight">{m.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Author */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#0E8B8B] rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-bold text-sm">{t.author.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#2D3748] text-sm">{t.author}</p>
+                    <p className="text-xs text-[#718096]">{t.role} · {t.company}</p>
+                  </div>
+                </div>
+
+                {/* Industry Badge */}
+                <div className="mt-auto">
+                  <span className="inline-block bg-[#0E8B8B]/10 text-[#0E8B8B] text-xs font-semibold px-3 py-1 rounded-full">
+                    {t.industry}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Aggregate stats band */}
+          <div className="bg-[#2D3748] rounded-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+            {[
+              { value: "500+", label: "Workers Successfully Deployed" },
+              { value: "8+",   label: "Active Projects" },
+              { value: "6",    label: "Industries Served" },
+              { value: "100%", label: "Client Retention Rate" },
+            ].map((stat, i) => (
+              <div key={i}>
+                <div className="text-3xl md:text-4xl font-bold text-[#0E8B8B]">{stat.value}</div>
+                <div className="text-sm text-gray-300 mt-1">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

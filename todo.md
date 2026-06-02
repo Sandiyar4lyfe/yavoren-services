@@ -22,3 +22,8 @@
 - [x] Chatbot shows suggested prompts on first open
 - [x] Mobile-responsive navigation with hamburger menu
 - [x] Vitest tests for chatbot and contact form procedures (9 tests passing)
+
+## Testimonials / Case Studies
+- [x] Add Testimonials/Case Studies section with client success stories and metrics
+- [x] Include client quotes, company names, project metrics (workers deployed, duration)
+- [x] Add animated stat counters or highlight cards for key results
