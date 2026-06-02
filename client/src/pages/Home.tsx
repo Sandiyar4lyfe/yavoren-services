@@ -710,6 +710,343 @@ function ContactSection() {
   );
 }
 
+// ─── Testimonials Section Component ─────────────────────────────────────────
+
+function TestimonialsSection() {
+  // Fetch approved client-submitted testimonials from DB
+  const { data: approvedTestimonials = [] } = trpc.testimonials.getApproved.useQuery();
+
+  // Submission form state
+  const [tForm, setTForm] = useState({
+    name: "",
+    role: "",
+    company: "",
+    industry: "",
+    quote: "",
+    rating: 5,
+  });
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [formOpen, setFormOpen] = useState(false);
+
+  const submitTestimonial = trpc.testimonials.submit.useMutation({
+    onSuccess: () => {
+      toast.success("Thank you! Your testimonial has been submitted for review.");
+      setTForm({ name: "", role: "", company: "", industry: "", quote: "", rating: 5 });
+      setFormOpen(false);
+    },
+    onError: (err) => {
+      toast.error(err.message || "Failed to submit. Please try again.");
+    },
+  });
+
+  const handleTChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setTForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleTSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tForm.name.trim() || !tForm.role.trim() || !tForm.company.trim() || !tForm.industry.trim() || !tForm.quote.trim()) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+    submitTestimonial.mutate({
+      name: tForm.name,
+      role: tForm.role,
+      company: tForm.company,
+      industry: tForm.industry,
+      quote: tForm.quote,
+      rating: tForm.rating,
+    });
+  };
+
+  return (
+    <section id="testimonials" className="py-16 md:py-24 bg-white">
+      <div className="container">
+        {/* Section header */}
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 bg-[#0E8B8B]/10 text-[#0E8B8B] px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <Award className="w-4 h-4" />
+            CLIENT SUCCESS STORIES
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-4">
+            Trusted by <span className="text-[#0E8B8B]">Reputable Clients</span>
+          </h2>
+          <p className="text-[#718096] max-w-2xl mx-auto">
+            Real results from real partnerships. Here is what our clients say about working with YAVOREN Services.
+          </p>
+        </div>
+
+        {/* Static featured case studies */}
+        <div className="grid md:grid-cols-3 gap-8 mb-10">
+          {testimonials.map((t) => (
+            <div
+              key={t.id}
+              className="bg-[#F7FAFC] rounded-2xl p-8 flex flex-col gap-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <div className="relative">
+                <Quote className="w-8 h-8 text-[#0E8B8B]/20 absolute -top-1 -left-1" />
+                <p className="text-[#4A5568] text-sm leading-relaxed pl-6 italic">{t.quote}</p>
+              </div>
+              <div className="grid grid-cols-3 gap-3 py-4 border-t border-b border-gray-200">
+                {t.metrics.map((m, i) => (
+                  <div key={i} className="text-center">
+                    <div className="text-lg font-bold text-[#0E8B8B]">{m.value}</div>
+                    <div className="text-xs text-[#718096] mt-0.5 leading-tight">{m.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-[#0E8B8B] rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-sm">{t.author.charAt(0)}</span>
+                </div>
+                <div>
+                  <p className="font-bold text-[#2D3748] text-sm">{t.author}</p>
+                  <p className="text-xs text-[#718096]">{t.role} · {t.company}</p>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <span className="inline-block bg-[#0E8B8B]/10 text-[#0E8B8B] text-xs font-semibold px-3 py-1 rounded-full">
+                  {t.industry}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Approved client-submitted testimonials */}
+        {approvedTestimonials.length > 0 && (
+          <div className="mb-10">
+            <h3 className="text-lg font-bold text-[#2D3748] mb-6 text-center">More From Our Clients</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {approvedTestimonials.map((t) => (
+                <div
+                  key={t.id}
+                  className="bg-[#F7FAFC] rounded-2xl p-6 flex flex-col gap-4 border border-gray-100 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < t.rating ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <div className="relative">
+                    <Quote className="w-7 h-7 text-[#0E8B8B]/20 absolute -top-1 -left-1" />
+                    <p className="text-[#4A5568] text-sm leading-relaxed pl-5 italic">{t.quote}</p>
+                  </div>
+                  <div className="flex items-center gap-3 mt-auto">
+                    <div className="w-9 h-9 bg-[#0E8B8B] rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold text-xs">{t.name.charAt(0)}</span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-[#2D3748] text-sm">{t.name}</p>
+                      <p className="text-xs text-[#718096]">{t.role} · {t.company}</p>
+                    </div>
+                  </div>
+                  <span className="inline-block bg-[#0E8B8B]/10 text-[#0E8B8B] text-xs font-semibold px-3 py-1 rounded-full w-fit">
+                    {t.industry}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Aggregate stats band */}
+        <div className="bg-[#2D3748] rounded-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white mb-12">
+          {[
+            { value: "500+", label: "Workers Successfully Deployed" },
+            { value: "8+",   label: "Active Projects" },
+            { value: "6",    label: "Industries Served" },
+            { value: "100%", label: "Client Retention Rate" },
+          ].map((stat, i) => (
+            <div key={i}>
+              <div className="text-3xl md:text-4xl font-bold text-[#0E8B8B]">{stat.value}</div>
+              <div className="text-sm text-gray-300 mt-1">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Submit a Testimonial ── */}
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-bold text-[#2D3748] mb-2">Share Your Experience</h3>
+            <p className="text-[#718096] text-sm">
+              Have you worked with YAVOREN Services? We would love to hear from you. Submitted testimonials are reviewed before publication.
+            </p>
+          </div>
+
+          {!formOpen ? (
+            <div className="text-center">
+              <button
+                onClick={() => setFormOpen(true)}
+                className="inline-flex items-center gap-2 bg-[#0E8B8B] hover:bg-[#0D7B7B] text-white font-semibold px-6 py-3 rounded-xl transition-all active:scale-[0.98]"
+              >
+                <Quote className="w-4 h-4" />
+                Write a Testimonial
+              </button>
+            </div>
+          ) : (
+            <div className="bg-[#F7FAFC] rounded-2xl p-8 border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h4 className="font-bold text-[#2D3748]">Your Testimonial</h4>
+                <button
+                  onClick={() => setFormOpen(false)}
+                  className="text-[#718096] hover:text-[#2D3748] transition-colors"
+                  aria-label="Close form"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <form onSubmit={handleTSubmit} className="space-y-4">
+                {/* Name + Role */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-[#2D3748] mb-1">
+                      Full Name <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      name="name"
+                      value={tForm.name}
+                      onChange={handleTChange}
+                      placeholder="Ahmad bin Ali"
+                      required
+                      className="border-gray-200 focus:border-[#0E8B8B]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-[#2D3748] mb-1">
+                      Job Title / Role <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      name="role"
+                      value={tForm.role}
+                      onChange={handleTChange}
+                      placeholder="Operations Manager"
+                      required
+                      className="border-gray-200 focus:border-[#0E8B8B]"
+                    />
+                  </div>
+                </div>
+
+                {/* Company + Industry */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-[#2D3748] mb-1">
+                      Company <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      name="company"
+                      value={tForm.company}
+                      onChange={handleTChange}
+                      placeholder="Your Company Sdn. Bhd."
+                      required
+                      className="border-gray-200 focus:border-[#0E8B8B]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-[#2D3748] mb-1">
+                      Industry <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="industry"
+                      value={tForm.industry}
+                      onChange={handleTChange}
+                      required
+                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E8B8B]/20 focus:border-[#0E8B8B] bg-white text-gray-700"
+                    >
+                      <option value="">Select industry…</option>
+                      <option>Manufacturing</option>
+                      <option>Warehousing &amp; Distribution</option>
+                      <option>Logistics &amp; Supply Chain</option>
+                      <option>Telecommunications Infrastructure</option>
+                      <option>Electronics Manufacturing</option>
+                      <option>Commercial Buildings</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Star Rating */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#2D3748] mb-2">
+                    Your Rating <span className="text-red-500">*</span>
+                  </label>
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setTForm((p) => ({ ...p, rating: star }))}
+                        onMouseEnter={() => setHoveredRating(star)}
+                        onMouseLeave={() => setHoveredRating(0)}
+                        className="transition-transform hover:scale-110 active:scale-95"
+                        aria-label={`${star} star`}
+                      >
+                        <Star
+                          className={`w-7 h-7 transition-colors ${
+                            star <= (hoveredRating || tForm.rating)
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                    <span className="ml-2 text-sm text-[#718096]">
+                      {["Poor", "Fair", "Good", "Great", "Excellent"][(hoveredRating || tForm.rating) - 1]}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Testimonial text */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#2D3748] mb-1">
+                    Your Testimonial <span className="text-red-500">*</span>
+                  </label>
+                  <Textarea
+                    name="quote"
+                    value={tForm.quote}
+                    onChange={handleTChange}
+                    placeholder="Share your experience working with YAVOREN Services…"
+                    rows={4}
+                    required
+                    className="border-gray-200 focus:border-[#0E8B8B] resize-none"
+                  />
+                  <p className="text-xs text-[#718096] mt-1">{tForm.quote.length}/1000 characters</p>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={submitTestimonial.isPending}
+                  className="w-full bg-[#0E8B8B] hover:bg-[#0D7B7B] text-white font-semibold py-2.5 active:scale-[0.98] transition-all"
+                >
+                  {submitTestimonial.isPending ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Submitting…</>
+                  ) : (
+                    <><Send className="w-4 h-4 mr-2" />Submit Testimonial</>
+                  )}
+                </Button>
+
+                <p className="text-xs text-center text-[#718096]">
+                  Testimonials are reviewed by our team before being published on this page.
+                </p>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function Home() {
@@ -1123,90 +1460,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials / Case Studies Section */}
-      <section id="testimonials" className="py-16 md:py-24 bg-white">
-        <div className="container">
-          <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 bg-[#0E8B8B]/10 text-[#0E8B8B] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              <Award className="w-4 h-4" />
-              CLIENT SUCCESS STORIES
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-4">
-              Trusted by <span className="text-[#0E8B8B]">Reputable Clients</span>
-            </h2>
-            <p className="text-[#718096] max-w-2xl mx-auto">
-              Real results from real partnerships. Here is what our clients say about working with YAVOREN Services.
-            </p>
-          </div>
-
-          {/* Testimonial Cards */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {testimonials.map((t) => (
-              <div
-                key={t.id}
-                className="bg-[#F7FAFC] rounded-2xl p-8 flex flex-col gap-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-              >
-                {/* Stars */}
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-
-                {/* Quote */}
-                <div className="relative">
-                  <Quote className="w-8 h-8 text-[#0E8B8B]/20 absolute -top-1 -left-1" />
-                  <p className="text-[#4A5568] text-sm leading-relaxed pl-6 italic">
-                    {t.quote}
-                  </p>
-                </div>
-
-                {/* Metrics */}
-                <div className="grid grid-cols-3 gap-3 py-4 border-t border-b border-gray-200">
-                  {t.metrics.map((m, i) => (
-                    <div key={i} className="text-center">
-                      <div className="text-lg font-bold text-[#0E8B8B]">{m.value}</div>
-                      <div className="text-xs text-[#718096] mt-0.5 leading-tight">{m.label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Author */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#0E8B8B] rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm">{t.author.charAt(0)}</span>
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#2D3748] text-sm">{t.author}</p>
-                    <p className="text-xs text-[#718096]">{t.role} · {t.company}</p>
-                  </div>
-                </div>
-
-                {/* Industry Badge */}
-                <div className="mt-auto">
-                  <span className="inline-block bg-[#0E8B8B]/10 text-[#0E8B8B] text-xs font-semibold px-3 py-1 rounded-full">
-                    {t.industry}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Aggregate stats band */}
-          <div className="bg-[#2D3748] rounded-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
-            {[
-              { value: "500+", label: "Workers Successfully Deployed" },
-              { value: "8+",   label: "Active Projects" },
-              { value: "6",    label: "Industries Served" },
-              { value: "100%", label: "Client Retention Rate" },
-            ].map((stat, i) => (
-              <div key={i}>
-                <div className="text-3xl md:text-4xl font-bold text-[#0E8B8B]">{stat.value}</div>
-                <div className="text-sm text-gray-300 mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection />
 
       {/* Contact Section */}
       <ContactSection />

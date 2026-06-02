@@ -1,9 +1,12 @@
 import { COOKIE_NAME } from "@shared/const";
+import { eq } from "drizzle-orm";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { invokeLLM } from "./_core/llm";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+import { getDb } from "./db";
+import { testimonials } from "../drizzle/schema";
 import { z } from "zod";
 
 const YAVOREN_SYSTEM_PROMPT = `You are a helpful assistant for YAVOREN Services Sdn. Bhd., a professional workforce solutions company based in Malaysia.
@@ -106,6 +109,63 @@ export const appRouter = router({
         await notifyOwner({
           title: `New Contact Form Submission from ${input.name}`,
           content: lines.join("\n"),
+        });
+
+        return { success: true };
+      }),
+  }),
+
+  testimonials: router({
+    /** Public: fetch all approved testimonials ordered newest-first */
+    getApproved: publicProcedure.query(async () => {
+      const db = await getDb();
+      if (!db) return [];
+      const rows = await db
+        .select()
+        .from(testimonials)
+        .where(eq(testimonials.status, "approved"))
+        .orderBy(testimonials.createdAt);
+      return rows;
+    }),
+
+    /** Public: submit a new testimonial (starts as "pending" for moderation) */
+    submit: publicProcedure
+      .input(
+        z.object({
+          name: z.string().min(2, "Name is required").max(128),
+          role: z.string().min(2, "Role is required").max(128),
+          company: z.string().min(2, "Company is required").max(128),
+          industry: z.string().min(2, "Industry is required").max(128),
+          quote: z.string().min(20, "Testimonial must be at least 20 characters").max(1000),
+          rating: z.number().int().min(1).max(5).default(5),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        await db.insert(testimonials).values({
+          name: input.name,
+          role: input.role,
+          company: input.company,
+          industry: input.industry,
+          quote: input.quote,
+          rating: input.rating,
+          status: "pending",
+        });
+
+        await notifyOwner({
+          title: `New Testimonial Submitted by ${input.name} (${input.company})`,
+          content: [
+            `Name: ${input.name}`,
+            `Role: ${input.role}`,
+            `Company: ${input.company}`,
+            `Industry: ${input.industry}`,
+            `Rating: ${"★".repeat(input.rating)}${"☆".repeat(5 - input.rating)}`,
+            "",
+            `"${input.quote}"`,
+            "",
+            "Please log in to the admin panel to approve or reject this testimonial.",
+          ].join("\n"),
         });
 
         return { success: true };

@@ -27,3 +27,10 @@
 - [x] Add Testimonials/Case Studies section with client success stories and metrics
 - [x] Include client quotes, company names, project metrics (workers deployed, duration)
 - [x] Add animated stat counters or highlight cards for key results
+## Client Testimonial Submission
+- [x] Add testimonials table to database schema (name, role, company, industry, quote, rating, status: pending/approved)
+- [x] Add tRPC procedures: submitTestimonial (public) and getApprovedTestimonials (public)
+- [x] Notify owner on new testimonial submission
+- [x] Add testimonial submission form below existing case study cards
+- [x] Display approved user-submitted testimonials dynamically from DB
+- [x] Write vitest tests for testimonial procedures
