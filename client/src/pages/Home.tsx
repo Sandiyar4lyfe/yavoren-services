@@ -1606,7 +1606,7 @@ export default function Home() {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/60111-5556106"
+        href="https://wa.me/601115556106"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with us on WhatsApp"
