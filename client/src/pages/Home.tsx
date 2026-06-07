@@ -862,19 +862,19 @@ function TestimonialsSection() {
             {/* Text */}
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className="bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Industry First</span>
+                <span className="bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Certified Achievement</span>
                 <span className="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full">ELEVATE Audit · 审计认证 · Audit ELEVATE</span>
               </div>
               <h3 className="text-xl md:text-2xl font-bold mb-1">
-                Only Service Provider to Pass ELEVATE Audit — Zero Major Findings
+                Service Provider to Pass ELEVATE Audit — Zero Major Findings
               </h3>
-              <p className="text-teal-100 text-sm mb-0.5">唯一通过 ELEVATE 审计且零重大发现的服务提供商</p>
-              <p className="text-teal-200 text-xs mb-3">Satu-satunya pembekal perkhidmatan yang lulus Audit ELEVATE tanpa sebarang penemuan utama</p>
+              <p className="text-teal-100 text-sm mb-0.5">通过 ELEVATE 审计且零重大发现的服务提供商</p>
+              <p className="text-teal-200 text-xs mb-3">Pembekal perkhidmatan yang lulus Audit ELEVATE tanpa sebarang penemuan utama</p>
               <p className="text-teal-100 text-sm leading-relaxed">
-                YAVOREN Services is the <strong className="text-white">only workforce service provider</strong> in Malaysia to have successfully managed the ELEVATE Audit with <strong className="text-amber-300">zero major findings</strong> — and maintained this standard for <strong className="text-white">4 consecutive years</strong> through exemplary workers' welfare management.
+                YAVOREN Services is a workforce service provider that has successfully managed the ELEVATE Audit with <strong className="text-amber-300">minor findings</strong> — and maintained this standard for <strong className="text-white">4 consecutive years</strong> through exemplary workers’ welfare management.
               </p>
-              <p className="text-teal-200 text-xs mt-1">亚沃伦服务是马来西亚唯一连续4年通过 ELEVATE 审计且零重大发现的劳动力服务提供商，以卓越的工人福利管理著称。</p>
-              <p className="text-teal-300 text-xs mt-0.5">YAVOREN Services ialah satu-satunya pembekal tenaga kerja di Malaysia yang berjaya menguruskan Audit ELEVATE selama 4 tahun berturut-turut tanpa sebarang penemuan utama.</p>
+              <p className="text-teal-200 text-xs mt-1">亚沃伦服务连续4年通过 ELEVATE 审计，以卓越的工人福利管理著称。</p>
+              <p className="text-teal-300 text-xs mt-0.5">YAVOREN Services berjaya menguruskan Audit ELEVATE selama 4 tahun berturut-turut melalui pengurusan kebajikan pekerja yang cemerlang.</p>
             </div>
             {/* Stats */}
             <div className="flex-shrink-0 grid grid-cols-2 gap-4 text-center">
@@ -885,10 +885,10 @@ function TestimonialsSection() {
                 <div className="text-xs text-teal-300">Tahun Berturut</div>
               </div>
               <div className="bg-white/15 rounded-xl p-4">
-                <div className="text-3xl font-bold text-amber-300">0</div>
-                <div className="text-xs text-teal-100 mt-1">Major Findings</div>
-                <div className="text-xs text-teal-200">重大发现</div>
-                <div className="text-xs text-teal-300">Penemuan Utama</div>
+                <div className="text-2xl font-bold text-amber-300">Minor</div>
+                <div className="text-xs text-teal-100 mt-1">Findings Only</div>
+                <div className="text-xs text-teal-200">仅小问题</div>
+                <div className="text-xs text-teal-300">Penemuan Minor</div>
               </div>
             </div>
           </div>
