@@ -353,7 +353,7 @@ function ChatbotWidget() {
         ...prev,
         {
           role: "assistant",
-          content: "I'm sorry, I encountered an error. Please try again or contact us directly at info@yavoren.com.",
+          content: "I'm sorry, I encountered an error. Please try again or contact us directly at sales@yavoren.com.",
         },
       ]);
     },
@@ -582,8 +582,8 @@ function ContactSection() {
                   </div>
                   <div>
                     <p className="font-semibold text-[#2D3748]">Email</p>
-                    <a href="mailto:info@yavoren.com" className="text-[#0E8B8B] hover:underline text-sm">
-                      info@yavoren.com
+                    <a href="mailto:sales@yavoren.com" className="text-[#0E8B8B] hover:underline text-sm">
+                       sales@yavoren.com
                     </a>
                   </div>
                 </div>
@@ -593,7 +593,7 @@ function ContactSection() {
                   </div>
                   <div>
                     <p className="font-semibold text-[#2D3748]">Phone</p>
-                    <p className="text-[#718096] text-sm">+60 XXX XXXX XXX</p>
+                    <a href="tel:+60111-5556106" className="text-[#718096] text-sm hover:text-[#0E8B8B] transition-colors">+6011-15556106</a>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -1585,11 +1585,11 @@ export default function Home() {
               <div className="space-y-2 text-gray-400 text-sm">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#0E8B8B]" />
-                  <a href="mailto:info@yavoren.com" className="hover:text-[#0E8B8B] transition-colors">info@yavoren.com</a>
+                  <a href="mailto:sales@yavoren.com" className="hover:text-[#0E8B8B] transition-colors">sales@yavoren.com</a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-[#0E8B8B]" />
-                  <span>+60 XXX XXXX XXX</span>
+                  <a href="tel:+60111-5556106" className="hover:text-[#0E8B8B] transition-colors">+6011-15556106</a>
                 </div>
               </div>
             </div>
