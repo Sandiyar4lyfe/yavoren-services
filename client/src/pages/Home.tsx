@@ -321,9 +321,9 @@ const testimonials: Testimonial[] = [
     id: 1,
     quote:
       "YAVOREN Services delivered 30–50 skilled workers consistently for our Kluang distribution centre. Their workforce management is seamless — payroll, compliance, and on-site supervision handled without any disruption to our operations.",
-    author: "Operations Manager",
-    role: "Logistics & Distribution",
-    company: "Longterm Distribution Sdn. Bhd.",
+  author: "Operations Manager",
+  role: "Logistics & Distribution",
+  company: "",
     industry: "Warehousing & Distribution",
     metrics: [
       { label: "Workers Deployed", value: "30–50" },
@@ -351,7 +351,7 @@ const testimonials: Testimonial[] = [
       "YAVOREN supplied 50 line operators, QC staff, and electronic testers for our production facility. The workers were pre-vetted, trained, and ready to contribute from day one. Our production targets were met without compromise.",
     author: "Plant Manager",
     role: "Electronics Manufacturing",
-    company: "Nulatex Sdn. Bhd.",
+    company: "",
     industry: "Electronics Manufacturing",
     metrics: [
       { label: "Workers Deployed", value: "50" },
@@ -924,7 +924,7 @@ function TestimonialsSection() {
                 </div>
                 <div>
                   <p className="font-bold text-[#2D3748] text-sm">{t.author}</p>
-                  <p className="text-xs text-[#718096]">{t.role} · {t.company}</p>
+                  <p className="text-xs text-[#718096]">{t.role}{t.company ? ` · ${t.company}` : ""}</p>
                 </div>
               </div>
               <div className="mt-auto">
