@@ -350,9 +350,9 @@ const testimonials: Testimonial[] = [
     quote:
       "YAVOREN supplied 50 line operators, QC staff, and electronic testers for our production facility. The workers were pre-vetted, trained, and ready to contribute from day one. Our production targets were met without compromise.",
     author: "Plant Manager",
-    role: "Electronics Manufacturing",
+    role: "Manufacturing",
     company: "",
-    industry: "Electronics Manufacturing",
+    industry: "Manufacturing",
     metrics: [
       { label: "Workers Deployed", value: "50" },
       { label: "Roles Filled", value: "4 Types" },
