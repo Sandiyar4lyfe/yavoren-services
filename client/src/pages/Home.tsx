@@ -1225,14 +1225,12 @@ export default function Home() {
       {/* Navigation Header */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
         <div className="container flex items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#0E8B8B] to-[#0D9B9B] rounded-full flex items-center justify-center">
-              <span className="text-white font-bold">Y</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-[#2D3748]">YAVOREN</span>
-              <span className="text-xs text-[#0E8B8B] font-semibold">SERVICES</span>
-            </div>
+          <div className="flex items-center">
+            <img
+              src="/manus-storage/yavoren-logo_5d47b8a5.png"
+              alt="Yavoren Services Sdn. Bhd."
+              className="h-12 w-auto object-contain"
+            />
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("About", "公司", "Syarikat")}</a>
@@ -1735,13 +1733,12 @@ export default function Home() {
         <div className="container">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-[#0E8B8B] rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">Y</span>
-                </div>
-                <div>
-                  <span className="font-bold text-sm">YAVOREN SERVICES</span>
-                </div>
+              <div className="mb-4">
+                <img
+                  src="/manus-storage/yavoren-logo_5d47b8a5.png"
+                  alt="Yavoren Services Sdn. Bhd."
+                  className="h-14 w-auto object-contain brightness-0 invert"
+                />
               </div>
               <p className="text-gray-400 text-sm">{t("Your trusted partner for comprehensive workforce solutions.", "您全面劳动力解决方案的信赖伙伴", "Rakan kongsi dipercayai anda untuk penyelesaian tenaga kerja yang komprehensif.")}</p>
             </div>
