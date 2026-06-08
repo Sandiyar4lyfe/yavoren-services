@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { useLanguage, type Language } from "@/contexts/LanguageContext";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -24,6 +26,8 @@ import {
   Quote,
   Star,
   Award,
+  Globe,
+  ChevronDown,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -36,6 +40,40 @@ import { Streamdown } from "streamdown";
  * Color Palette: Teal (#0E8B8B), Dark Gray (#2D3748), Light Gray (#F7FAFC)
  * Typography: Poppins Bold for headings, Inter Regular for body
  */
+
+// ─── Language Switcher Dropdown ──────────────────────────────────────────────
+
+const LANG_LABELS: Record<Language, { label: string; short: string }> = {
+  en: { label: "English - EN", short: "EN" },
+  zh: { label: "中文 - ZH", short: "中文" },
+  ms: { label: "Bahasa Malaysia - BM", short: "BM" },
+};
+
+function LanguageSwitcher({ className = "" }: { className?: string }) {
+  const { language, setLanguage } = useLanguage();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#0E8B8B]/40 text-[#0E8B8B] hover:bg-[#0E8B8B]/10 transition-colors text-sm font-semibold ${className}`}
+        >
+          <Globe className="w-4 h-4" />
+          {LANG_LABELS[language].short}
+          <ChevronDown className="w-3 h-3 opacity-70" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-52">
+        <DropdownMenuLabel className="text-xs text-gray-500 font-normal">Change language</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup value={language} onValueChange={(v) => setLanguage(v as Language)}>
+          <DropdownMenuRadioItem value="en">English - EN</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="zh">中文 - ZH</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="ms">Bahasa Malaysia - BM</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 interface ProjectMilestone {
   id: number;
@@ -1176,6 +1214,11 @@ function TestimonialsSection() {
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language } = useLanguage();
+
+  // Helper: pick the right text based on active language
+  const t = (en: string, zh: string, ms: string) =>
+    language === "zh" ? zh : language === "ms" ? ms : en;
 
   return (
     <div className="min-h-screen bg-white">
@@ -1191,17 +1234,18 @@ export default function Home() {
               <span className="text-xs text-[#0E8B8B] font-semibold">SERVICES</span>
             </div>
           </div>
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">About <span className="text-[#0E8B8B] text-xs">公司 · Syarikat</span></a>
-            <a href="#services" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Services <span className="text-[#0E8B8B] text-xs">服务 · Perkhidmatan</span></a>
-            <a href="#projects" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Projects <span className="text-[#0E8B8B] text-xs">项目 · Projek</span></a>
-            <a href="#testimonials" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Clients <span className="text-[#0E8B8B] text-xs">客户 · Pelanggan</span></a>
-            <a href="#contact" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">Contact <span className="text-[#0E8B8B] text-xs">联系 · Hubungi</span></a>
+          <nav className="hidden md:flex items-center gap-6">
+            <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("About", "公司", "Syarikat")}</a>
+            <a href="#services" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Services", "服务", "Perkhidmatan")}</a>
+            <a href="#projects" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Projects", "项目", "Projek")}</a>
+            <a href="#testimonials" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Clients", "客户", "Pelanggan")}</a>
+            <a href="#contact" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Contact", "联系", "Hubungi")}</a>
+            <LanguageSwitcher />
             <a
               href="#contact"
               className="bg-[#0E8B8B] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#0D7B7B] transition-colors"
             >
-              Get a Quote · 请求报价 · Dapatkan Sebutan Harga
+              {t("Get a Quote", "请求报价", "Dapatkan Sebutan Harga")}
             </a>
           </nav>
           <button
@@ -1215,21 +1259,24 @@ export default function Home() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3">
             {[
-              { id: "about", label: "About", zh: "公司", ms: "Syarikat" },
-              { id: "services", label: "Services", zh: "服务", ms: "Perkhidmatan" },
-              { id: "projects", label: "Projects", zh: "项目", ms: "Projek" },
-              { id: "testimonials", label: "Clients", zh: "客户", ms: "Pelanggan" },
-              { id: "contact", label: "Contact", zh: "联系", ms: "Hubungi" },
-            ].map(({ id, label, zh, ms }) => (
+              { id: "about", en: "About", zh: "公司", ms: "Syarikat" },
+              { id: "services", en: "Services", zh: "服务", ms: "Perkhidmatan" },
+              { id: "projects", en: "Projects", zh: "项目", ms: "Projek" },
+              { id: "testimonials", en: "Clients", zh: "客户", ms: "Pelanggan" },
+              { id: "contact", en: "Contact", zh: "联系", ms: "Hubungi" },
+            ].map(({ id, en, zh, ms }) => (
               <a
                 key={id}
                 href={`#${id}`}
                 className="block text-[#2D3748] hover:text-[#0E8B8B] transition-colors font-medium capitalize py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {label} <span className="text-[#0E8B8B] text-xs">{zh} · {ms}</span>
+                {t(en, zh, ms)}
               </a>
             ))}
+            <div className="pt-2 border-t border-gray-100">
+              <LanguageSwitcher className="w-full justify-center" />
+            </div>
           </div>
         )}
       </header>
@@ -1240,30 +1287,36 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="inline-block bg-[#0E8B8B] text-white px-4 py-2 rounded-full text-sm font-semibold">
-                WORKFORCE SOLUTIONS <span className="opacity-80 text-xs ml-1">· 劳动力解决方案 · Penyelesaian Tenaga Kerja</span>
+                {t("WORKFORCE SOLUTIONS", "劳动力解决方案", "Penyelesaian Tenaga Kerja")}
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-[#2D3748] leading-tight">
-                Your Partner <span className="text-[#0E8B8B]">In Progress</span>
-                <span className="block text-2xl md:text-3xl text-[#718096] font-medium mt-2">您值得信赖的发展伙伴</span>
-                <span className="block text-xl md:text-2xl text-[#A0AEC0] font-medium mt-1">Rakan Kongsi Kemajuan Anda</span>
+                {language === "en" ? (
+                  <>Your Partner <span className="text-[#0E8B8B]">In Progress</span></>
+                ) : language === "zh" ? (
+                  "您値得信赖的发展伙伴"
+                ) : (
+                  "Rakan Kongsi Kemajuan Anda"
+                )}
               </h1>
               <p className="text-lg text-[#718096] leading-relaxed">
-                Delivering reliable, professional, and innovative workforce solutions that create value and build lasting partnerships.
-                <span className="block text-base mt-1">提供可靠、专业且创新的劳动力解决方案，创造价值并建立持久合作关系。</span>
-                <span className="block text-sm mt-1 text-[#A0AEC0]">Menyampaikan penyelesaian tenaga kerja yang boleh dipercayai, profesional dan inovatif.</span>
+                {t(
+                  "Delivering reliable, professional, and innovative workforce solutions that create value and build lasting partnerships.",
+                  "提供可靠、专业且创新的劳动力解决方案，创造价値并建立持久合作关系。",
+                  "Menyampaikan penyelesaian tenaga kerja yang boleh dipercayai, profesional dan inovatif."
+                )}
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <a
                   href="#contact"
                   className="inline-flex items-center bg-[#0E8B8B] hover:bg-[#0D7B7B] text-white px-6 py-3 rounded-lg font-semibold transition-colors active:scale-[0.98]"
                 >
-                  Get Started · 立即开始 · Mulakan <ChevronRight className="w-4 h-4 ml-2" />
+                  {t("Get Started", "立即开始", "Mulakan")} <ChevronRight className="w-4 h-4 ml-2" />
                 </a>
                 <a
                   href="#services"
                   className="inline-flex items-center border-2 border-[#0E8B8B] text-[#0E8B8B] hover:bg-[#F7FAFC] px-6 py-3 rounded-lg font-semibold transition-colors"
                 >
-                  Our Services · 我们的服务 · Perkhidmatan Kami
+                  {t("Our Services", "我们的服务", "Perkhidmatan Kami")}
                 </a>
               </div>
             </div>
@@ -1285,21 +1338,15 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-8 text-white text-center">
             <div>
               <div className="text-3xl md:text-4xl font-bold">500+</div>
-              <p className="text-teal-100 text-sm mt-1">Workers Deployed</p>
-              <p className="text-teal-200 text-xs">已部署工人</p>
-              <p className="text-teal-300 text-xs opacity-80">Pekerja Dihantar</p>
+              <p className="text-teal-100 text-sm mt-1">{t("Workers Deployed", "已部署工人", "Pekerja Dihantar")}</p>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold">8+</div>
-              <p className="text-teal-100 text-sm mt-1">Active Projects</p>
-              <p className="text-teal-200 text-xs">活跃项目</p>
-              <p className="text-teal-300 text-xs opacity-80">Projek Aktif</p>
+              <p className="text-teal-100 text-sm mt-1">{t("Active Projects", "活跃项目", "Projek Aktif")}</p>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold">6</div>
-              <p className="text-teal-100 text-sm mt-1">Industries Served</p>
-              <p className="text-teal-200 text-xs">服务行业</p>
-              <p className="text-teal-300 text-xs opacity-80">Industri Dilayan</p>
+              <p className="text-teal-100 text-sm mt-1">{t("Industries Served", "服务行业", "Industri Dilayan")}</p>
             </div>
           </div>
         </div>
@@ -1311,24 +1358,38 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748]">
-                About <span className="text-[#0E8B8B]">Us</span>
-                <span className="block text-xl text-[#718096] font-medium mt-1">公司简介</span>
-                <span className="block text-lg text-[#A0AEC0] font-medium mt-0.5">Tentang Kami</span>
+                {language === "en" ? (
+                  <>About <span className="text-[#0E8B8B]">Us</span></>
+                ) : language === "zh" ? (
+                  <>公司<span className="text-[#0E8B8B]">简介</span></>
+                ) : (
+                  <>Tentang <span className="text-[#0E8B8B]">Kami</span></>
+                )}
               </h2>
               <p className="text-[#718096] leading-relaxed">
-                Founded in 2022, <strong className="text-[#0E8B8B]">Skill Birds Services</strong> began as a reputable labour supply company, committed to delivering reliable and efficient manpower solutions. Building on a strong foundation and growing client trust, the company evolved into <strong className="text-[#0E8B8B]">Yavoren Services</strong>, expanding its capabilities beyond labour supply to include a wider range of service solutions.
-                <span className="block text-sm mt-1">公司于2022年创立，最初以《技鸟服务》为名，致力提供可靠高效的劳动力解决方案。随着业务发展，公司正式更名为《亚沃伦服务》。</span>
-                <span className="block text-xs mt-1 text-[#A0AEC0]">Diasaskan pada 2022 sebagai Skill Birds Services, syarikat ini berkembang menjadi Yavoren Services.</span>
+                {language === "en" ? (
+                  <>Founded in 2022, <strong className="text-[#0E8B8B]">Skill Birds Services</strong> began as a reputable labour supply company, committed to delivering reliable and efficient manpower solutions. Building on a strong foundation and growing client trust, the company evolved into <strong className="text-[#0E8B8B]">Yavoren Services</strong>, expanding its capabilities beyond labour supply to include a wider range of service solutions.</>
+                ) : language === "zh" ? (
+                  <>公司于2022年创立，最初以《技鸟服务》为名，致力提供可靠高效的劳动力解决方案。随着业务发展，公司正式更名为《亚沃伦服务》。</>
+                ) : (
+                  <>Diasaskan pada 2022 sebagai <strong className="text-[#0E8B8B]">Skill Birds Services</strong>, syarikat ini berkembang menjadi <strong className="text-[#0E8B8B]">Yavoren Services</strong>.</>
+                )}
               </p>
               <p className="text-[#718096] leading-relaxed">
-                Today, the organization operates as <strong className="text-[#0E8B8B]">YAVOREN Services Sdn Bhd</strong>, reflecting its growth, professionalism, and broader vision in the industry. YAVOREN Services specializes in end-to-end workforce solutions, including recruitment, training, and placement for both short-term and long-term assignments.
-                <span className="block text-sm mt-1">目前公司以 <strong className="text-[#0E8B8B]">亚沃伦服务有限公司</strong> 名义运营，专注于端到端劳动力解决方案，包括招聘、培训及短期与长期就业安置。</span>
-                <span className="block text-xs mt-1 text-[#A0AEC0]">Kini beroperasi sebagai <strong className="text-[#0E8B8B]">YAVOREN Services Sdn Bhd</strong>, pakar dalam penyelesaian tenaga kerja hujung-ke-hujung.</span>
+                {language === "en" ? (
+                  <>Today, the organization operates as <strong className="text-[#0E8B8B]">YAVOREN Services Sdn Bhd</strong>, reflecting its growth, professionalism, and broader vision in the industry. YAVOREN Services specializes in end-to-end workforce solutions, including recruitment, training, and placement for both short-term and long-term assignments.</>
+                ) : language === "zh" ? (
+                  <>目前公司以 <strong className="text-[#0E8B8B]">亚沃伦服务有限公司</strong> 名义运营，专注于端到端劳动力解决方案，包括招聘、培训及短期与长期就业安置。</>
+                ) : (
+                  <>Kini beroperasi sebagai <strong className="text-[#0E8B8B]">YAVOREN Services Sdn Bhd</strong>, pakar dalam penyelesaian tenaga kerja hujung-ke-hujung, termasuk pengambilan, latihan dan penempatan.</>
+                )}
               </p>
               <p className="text-[#718096] leading-relaxed">
-                With a focus on quality, consistency, and client satisfaction, YAVOREN Services continues to support businesses across various sectors by providing skilled manpower and dependable service support.
-                <span className="block text-sm mt-1">以品质、稳定性和客户满意度为核心，亚沃伦服务持续为各行业企业提供专业劳动力支持。</span>
-                <span className="block text-xs mt-1 text-[#A0AEC0]">Dengan fokus kepada kualiti dan kepuasan pelanggan, YAVOREN terus menyokong perniagaan merentas pelbagai sektor.</span>
+                {t(
+                  "With a focus on quality, consistency, and client satisfaction, YAVOREN Services continues to support businesses across various sectors by providing skilled manpower and dependable service support.",
+                  "以品质、稳定性和客户满意度为核心，亚沃伦服务持续为各行业企业提供专业劳动力支持。",
+                  "Dengan fokus kepada kualiti dan kepuasan pelanggan, YAVOREN terus menyokong perniagaan merentas pelbagai sektor."
+                )}
               </p>
             </div>
             <div className="space-y-6">
@@ -1336,11 +1397,13 @@ export default function Home() {
                 <div className="flex items-start gap-4 mb-4">
                   <Target className="w-8 h-8 flex-shrink-0 mt-1" />
                   <div>
-                    <h3 className="text-xl font-bold mb-2">OUR VISION <span className="text-base font-normal opacity-80">· 我们的愿景 · Visi Kami</span></h3>
+                    <h3 className="text-xl font-bold mb-2">{t("OUR VISION", "我们的愿景", "Visi Kami")}</h3>
                     <p className="text-sm leading-relaxed text-teal-50">
-                      In line with our founding objectives, SKILL BIRDS pledges to offer our clients the best and competitive services and solution related to local / foreign workers in MALAYSIA. We aspire to be a Centre of excellence, pioneering and applying the best practices in the industry within the boundary of law.
-                      <span className="block mt-2 opacity-90">我们致力为客户提供马来西亚本地及外籍劳工的最佳竞争力服务，并在法律框架内引领行业最佳实践。</span>
-                      <span className="block mt-1 opacity-75 text-xs">Kami berhasrat menjadi pusat kecemerlangan, memelopori amalan terbaik industri dalam sempadan undang-undang.</span>
+                      {t(
+                        "In line with our founding objectives, SKILL BIRDS pledges to offer our clients the best and competitive services and solution related to local / foreign workers in MALAYSIA. We aspire to be a Centre of excellence, pioneering and applying the best practices in the industry within the boundary of law.",
+                        "我们致力为客户提供马来西亚本地及外籍劳工的最佳竞争力服务，并在法律框架内引领行业最佳实践。",
+                        "Kami berhasrat menjadi pusat kecemerlangan, memelopori amalan terbaik industri dalam sempadan undang-undang."
+                      )}
                     </p>
                   </div>
                 </div>
@@ -1349,11 +1412,15 @@ export default function Home() {
                 <div className="flex items-start gap-4">
                   <Lightbulb className="w-8 h-8 flex-shrink-0 mt-1 text-[#0E8B8B]" />
                   <div>
-                    <h3 className="text-xl font-bold mb-2">OUR MISSION <span className="text-base font-normal text-[#718096]">· 我们的使命 · Misi Kami</span></h3>
+                    <h3 className="text-xl font-bold mb-2">{t("OUR MISSION", "我们的使命", "Misi Kami")}</h3>
                     <p className="text-sm leading-relaxed text-[#718096]">
-                      We strive to provide <strong className="text-[#0E8B8B]">innovative & responsive solutions</strong> that exceed the expectations of our clients. We simplify the process for our clients to <strong className="text-[#0E8B8B]">identify & resolve issues</strong> by expediting resolution time frame. We help clients to <strong className="text-[#0E8B8B]">create value</strong> in their businesses through our value-generating services.
-                      <span className="block mt-2">我们致力提供超越客户期望的<strong className="text-[#0E8B8B]">创新与快速响应的解决方案</strong>，帮助客户快速<strong className="text-[#0E8B8B]">发现并解决问题</strong>，并通过增值服务帮助客户<strong className="text-[#0E8B8B]">创造价值</strong>。</span>
-                      <span className="block mt-1 text-xs">Kami menyediakan <strong className="text-[#0E8B8B]">penyelesaian inovatif &amp; responsif</strong> yang melampaui jangkaan pelanggan dan membantu mereka <strong className="text-[#0E8B8B]">mencipta nilai</strong>.</span>
+                      {language === "en" ? (
+                        <>We strive to provide <strong className="text-[#0E8B8B]">innovative &amp; responsive solutions</strong> that exceed the expectations of our clients. We simplify the process for our clients to <strong className="text-[#0E8B8B]">identify &amp; resolve issues</strong> by expediting resolution time frame. We help clients to <strong className="text-[#0E8B8B]">create value</strong> in their businesses through our value-generating services.</>
+                      ) : language === "zh" ? (
+                        <>我们致力提供超越客户期望的<strong className="text-[#0E8B8B]">创新与快速响应的解决方案</strong>，帮助客户快速<strong className="text-[#0E8B8B]">发现并解决问题</strong>，并通过增値服务帮助客户<strong className="text-[#0E8B8B]">创造价値</strong>。</>
+                      ) : (
+                        <>Kami menyediakan <strong className="text-[#0E8B8B]">penyelesaian inovatif &amp; responsif</strong> yang melampaui jangkaan pelanggan dan membantu mereka <strong className="text-[#0E8B8B]">mencipta nilai</strong>.</>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -1368,14 +1435,20 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-2">
-              Our <span className="text-[#0E8B8B]">Services</span>
+              {language === "en" ? (
+                <>Our <span className="text-[#0E8B8B]">Services</span></>
+              ) : language === "zh" ? (
+                <>我们的<span className="text-[#0E8B8B]">服务</span></>
+              ) : (
+                <>Perkhidmatan <span className="text-[#0E8B8B]">Kami</span></>
+              )}
             </h2>
-            <p className="text-lg text-[#718096] font-medium mb-1">我们的服务</p>
-            <p className="text-[#A0AEC0] font-medium mb-3">Perkhidmatan Kami</p>
             <p className="text-[#718096] max-w-2xl mx-auto">
-              YAVOREN Services Sdn. Bhd. provides comprehensive workforce solutions designed to meet the diverse needs of businesses across various industries.
-              <span className="block text-sm mt-1">亚沃伦服务有限公司提供全面的劳动力解决方案，满足各行业多样化的业务需求。</span>
-              <span className="block text-xs mt-1 text-[#A0AEC0]">YAVOREN Services Sdn. Bhd. menyediakan penyelesaian tenaga kerja yang komprehensif untuk pelbagai industri.</span>
+              {t(
+                "YAVOREN Services Sdn. Bhd. provides comprehensive workforce solutions designed to meet the diverse needs of businesses across various industries.",
+                "亚沃伦服务有限公司提供全面的劳动力解决方案，满足各行业多样化的业务需求。",
+                "YAVOREN Services Sdn. Bhd. menyediakan penyelesaian tenaga kerja yang komprehensif untuk pelbagai industri."
+              )}
             </p>
           </div>
 
@@ -1390,14 +1463,10 @@ export default function Home() {
                     {service.icon}
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-[#2D3748] mb-0.5">
-                      {service.number}. {service.title}
+                    <h3 className="text-base font-bold text-[#2D3748] mb-1">
+                      {service.number}. {t(service.title, service.titleZh, service.titleMs)}
                     </h3>
-                    <p className="text-[#0E8B8B] text-xs font-medium mb-0.5">{service.titleZh}</p>
-                    <p className="text-[#0E8B8B] text-xs font-medium mb-1 opacity-70">{service.titleMs}</p>
-                    <p className="text-[#718096] text-sm">{service.description}</p>
-                    <p className="text-[#718096] text-xs mt-0.5">{service.descriptionZh}</p>
-                    <p className="text-[#718096] text-xs opacity-80">{service.descriptionMs}</p>
+                    <p className="text-[#718096] text-sm">{t(service.description, service.descriptionZh, service.descriptionMs)}</p>
                   </div>
                 </div>
               </div>
@@ -1411,13 +1480,17 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-2">
-              Years of Experience &amp; <span className="text-[#0E8B8B]">Project History</span>
+              {language === "en" ? (
+                <>Years of Experience &amp; <span className="text-[#0E8B8B]">Project History</span></>
+              ) : language === "zh" ? (
+                <>多年经验与<span className="text-[#0E8B8B]">项目历程</span></>
+              ) : (
+                <>Pengalaman &amp; <span className="text-[#0E8B8B]">Sejarah Projek</span></>
+              )}
             </h2>
-            <p className="text-lg text-[#718096] font-medium mb-1">多年经验与项目历程</p>
-            <p className="text-[#A0AEC0] font-medium mb-2">Pengalaman Bertahun &amp; Sejarah Projek</p>
-            <p className="text-[#718096]">Proven Track Record. Trusted by Reputable Clients.</p>
-            <p className="text-[#718096] text-sm">卓越业绩，深得知名客户信赖。</p>
-            <p className="text-[#A0AEC0] text-xs mt-1">Rekod Prestasi Terbukti. Dipercayai Pelanggan Terkemuka.</p>
+            <p className="text-[#718096]">
+              {t("Proven Track Record. Trusted by Reputable Clients.", "卓越业绩，深得知名客户信赖。", "Rekod Prestasi Terbukti. Dipercayai Pelanggan Terkemuka.")}
+            </p>
           </div>
 
           <div className="space-y-0">
@@ -1475,10 +1548,14 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-2">
-              Industries We <span className="text-[#0E8B8B]">Serve</span>
+              {language === "en" ? (
+                <>Industries We <span className="text-[#0E8B8B]">Serve</span></>
+              ) : language === "zh" ? (
+                <>我们服务的<span className="text-[#0E8B8B]">行业</span></>
+              ) : (
+                <>Industri Yang Kami <span className="text-[#0E8B8B]">Layani</span></>
+              )}
             </h2>
-            <p className="text-lg text-[#718096] font-medium mb-0.5">我们服务的行业</p>
-            <p className="text-[#A0AEC0] font-medium">Industri Yang Kami Layani</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -1492,9 +1569,7 @@ export default function Home() {
                     {industry.icon}
                   </div>
                 </div>
-                <h3 className="font-bold text-sm md:text-base">{industry.name}</h3>
-                <p className="text-teal-100 text-xs mt-0.5">{industry.nameZh}</p>
-                <p className="text-teal-200 text-xs opacity-80">{industry.nameMs}</p>
+                <h3 className="font-bold text-sm md:text-base">{t(industry.name, industry.nameZh, industry.nameMs)}</h3>
               </div>
             ))}
           </div>
@@ -1506,21 +1581,25 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-2">
-              Why <span className="text-[#0E8B8B]">Choose Us?</span>
+              {language === "en" ? (
+                <>Why <span className="text-[#0E8B8B]">Choose Us?</span></>
+              ) : language === "zh" ? (
+                <>为何<span className="text-[#0E8B8B]">选择我们？</span></>
+              ) : (
+                <>Mengapa <span className="text-[#0E8B8B]">Pilih Kami?</span></>
+              )}
             </h2>
-            <p className="text-lg text-[#718096] font-medium mb-0.5">为何选择我们？</p>
-            <p className="text-[#A0AEC0] font-medium">Mengapa Pilih Kami?</p>
           </div>
 
           {/* Standards */}
           <div className="mb-12 bg-[#F7FAFC] rounded-2xl p-8 border border-gray-100">
-            <h3 className="text-xl font-bold text-[#2D3748] mb-6">Our Standards <span className="text-base font-normal text-[#718096]">· 我们的标准 · Piawaian Kami</span></h3>
+            <h3 className="text-xl font-bold text-[#2D3748] mb-6">{t("Our Standards", "我们的标准", "Piawaian Kami")}</h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { title: "RBA APPROVED", desc: "Manpower Supply in Reputable Clients · 知名客户劳动力供应认证 · Bekalan Tenaga Kerja Pelanggan Terkemuka" },
-                { title: "ELAVETE ERSA (Irqa)", desc: "Qualified audit clients · 合格审计客户 · Pelanggan Audit Berkelayakan" },
-                { title: "ISO 9001", desc: "Qualified audit client · 质量管理认证 · Pensijilan Pengurusan Kualiti" },
-                { title: "JTK Compliant", desc: "Comply JTK audits · 劳工部合规 · Mematuhi Audit JTK" },
+                { title: "RBA APPROVED", descEn: "Manpower Supply in Reputable Clients", descZh: "知名客户劳动力供应认证", descMs: "Bekalan Tenaga Kerja Pelanggan Terkemuka" },
+                { title: "ELAVETE ERSA (Irqa)", descEn: "Qualified audit clients", descZh: "合格審计客户", descMs: "Pelanggan Audit Berkelayakan" },
+                { title: "ISO 9001", descEn: "Qualified audit client", descZh: "质量管理认证", descMs: "Pensijilan Pengurusan Kualiti" },
+                { title: "JTK Compliant", descEn: "Comply JTK audits", descZh: "劳工部合规", descMs: "Mematuhi Audit JTK" },
               ].map((std, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-9 h-9 bg-[#0E8B8B] text-white rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -1528,7 +1607,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-bold text-[#2D3748] text-sm">{std.title}</p>
-                    <p className="text-[#718096] text-xs">{std.desc}</p>
+                    <p className="text-[#718096] text-xs">{t(std.descEn, std.descZh, std.descMs)}</p>
                   </div>
                 </div>
               ))}
@@ -1539,49 +1618,53 @@ export default function Home() {
             {[
               {
                 icon: <Clock className="w-8 h-8" />,
-                title: "TIMELY DEPLOYMENT",
-                titleZh: "按时部署",
-                points: ["On-Time Workforce Delivery · 按时交付劳动力", "Emergency Support · 紧急支援"],
+                titleEn: "TIMELY DEPLOYMENT", titleZh: "按时部署", titleMs: "PENGHANTARAN TEPAT MASA",
+                pointsEn: ["On-Time Workforce Delivery", "Emergency Support"],
+                pointsZh: ["按时交付劳动力", "紧急支援"],
+                pointsMs: ["Penghantaran Tenaga Kerja Tepat Masa", "Sokongan Kecemasan"],
               },
               {
                 icon: <Users className="w-8 h-8" />,
-                title: "QUALITY OF WORKFORCE",
-                titleZh: "劳动力素质",
-                points: ["Skilled and Verified Workers · 经过验证的技术工人", "Background Checks · 背景审查", "Replacement Guarantee · 更换保证"],
+                titleEn: "QUALITY OF WORKFORCE", titleZh: "劳动力素质", titleMs: "KUALITI TENAGA KERJA",
+                pointsEn: ["Skilled and Verified Workers", "Background Checks", "Replacement Guarantee"],
+                pointsZh: ["经过验证的技术工人", "背景审查", "更换保证"],
+                pointsMs: ["Pekerja Mahir & Disahkan", "Semakan Latar Belakang", "Jaminan Penggantian"],
               },
               {
                 icon: <TrendingUp className="w-8 h-8" />,
-                title: "WORK PERFORMANCE",
-                titleZh: "工作表现",
-                points: ["High Productivity · 高效生产力", "Work Ethics · 诚信工作态度"],
+                titleEn: "WORK PERFORMANCE", titleZh: "工作表现", titleMs: "PRESTASI KERJA",
+                pointsEn: ["High Productivity", "Work Ethics"],
+                pointsZh: ["高效生产力", "诚信工作态度"],
+                pointsMs: ["Produktiviti Tinggi", "Etika Kerja"],
               },
               {
                 icon: <Headphones className="w-8 h-8" />,
-                title: "CONTINUOUS SUPPORT",
-                titleZh: "持续支持",
-                points: ["Ongoing Assistance · 持续协助", "Regular Monitoring · 定期监控"],
+                titleEn: "CONTINUOUS SUPPORT", titleZh: "持续支持", titleMs: "SOKONGAN BERTERUSAN",
+                pointsEn: ["Ongoing Assistance", "Regular Monitoring"],
+                pointsZh: ["持续协助", "定期监控"],
+                pointsMs: ["Bantuan Berterusan", "Pemantauan Berkala"],
               },
-            ].map((item, i) => (
+            ].map((item, i) => {
+              const pts = language === "zh" ? item.pointsZh : language === "ms" ? item.pointsMs : item.pointsEn;
+              return (
               <div key={i} className="bg-[#F7FAFC] p-6 rounded-xl text-center border border-gray-100 hover:border-[#0E8B8B]/30 transition-colors">
                 <div className="bg-[#0E8B8B] text-white w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
                   {item.icon}
                 </div>
-                <h3 className="font-bold text-[#2D3748] mb-0.5 text-sm">{item.title}</h3>
-                <p className="text-[#0E8B8B] text-xs font-medium mb-2">{(item as any).titleZh}</p>
+                <h3 className="font-bold text-[#2D3748] mb-2 text-sm">{t(item.titleEn, item.titleZh, item.titleMs)}</h3>
                 <ul className="text-xs text-[#718096] space-y-1">
-                  {item.points.map((p, j) => (
+                  {pts.map((p, j) => (
                     <li key={j}>✓ {p}</li>
                   ))}
                 </ul>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Benefits Grid */}
           <div className="bg-[#2D3748] text-white p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-1 text-center">BENEFITS FOR BUSINESSES</h3>
-            <p className="text-center text-teal-200 text-sm mb-0.5">企业效益</p>
-            <p className="text-center text-teal-300 text-xs mb-8 opacity-80">Manfaat Untuk Perniagaan</p>
+            <h3 className="text-2xl font-bold mb-8 text-center">{t("BENEFITS FOR BUSINESSES", "企业效益", "Manfaat Untuk Perniagaan")}</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
               {benefits.map((benefit, index) => (
                 <div key={index} className="text-center">
@@ -1590,12 +1673,8 @@ export default function Home() {
                       {benefit.icon}
                     </div>
                   </div>
-                  <h4 className="font-bold mb-0.5 text-xs">{benefit.title}</h4>
-                  <p className="text-teal-300 text-xs mb-0.5">{benefit.titleZh}</p>
-                  <p className="text-teal-300 text-xs mb-1 opacity-70">{benefit.titleMs}</p>
-                  <p className="text-xs text-gray-300">{benefit.description}</p>
-                  <p className="text-xs text-gray-400">{benefit.descriptionZh}</p>
-                  <p className="text-xs text-gray-500">{benefit.descriptionMs}</p>
+                  <h4 className="font-bold mb-1 text-xs">{t(benefit.title, benefit.titleZh, benefit.titleMs)}</h4>
+                  <p className="text-xs text-gray-300">{t(benefit.description, benefit.descriptionZh, benefit.descriptionMs)}</p>
                 </div>
               ))}
             </div>
@@ -1608,26 +1687,21 @@ export default function Home() {
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-2">Our Commitment</h2>
-              <p className="text-teal-100 text-lg mb-1">我们的承诺</p>
-              <p className="text-teal-200 text-base mb-6">Komitmen Kami</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("Our Commitment", "我们的承诺", "Komitmen Kami")}</h2>
               <div className="grid grid-cols-2 gap-5">
                 {[
-                  { icon: <Shield className="w-6 h-6" />, title: "Safety & Compliance", titleZh: "安全与合规" },
-                  { icon: <Handshake className="w-6 h-6" />, title: "Client Satisfaction", titleZh: "客户满意度" },
-                  { icon: <CheckCircle className="w-6 h-6" />, title: "Quality Service", titleZh: "优质服务" },
-                  { icon: <Users className="w-6 h-6" />, title: "Reliable Workforce", titleZh: "可靠劳动力" },
-                  { icon: <Clock className="w-6 h-6" />, title: "Timely Deployment", titleZh: "按时部署" },
-                  { icon: <TrendingUp className="w-6 h-6" />, title: "Driving Your Business Forward", titleZh: "推动您的业务发展" },
+                  { icon: <Shield className="w-6 h-6" />, titleEn: "Safety &amp; Compliance", titleZh: "安全与合规", titleMs: "Keselamatan &amp; Pematuhan" },
+                  { icon: <Handshake className="w-6 h-6" />, titleEn: "Client Satisfaction", titleZh: "客户满意度", titleMs: "Kepuasan Pelanggan" },
+                  { icon: <CheckCircle className="w-6 h-6" />, titleEn: "Quality Service", titleZh: "优质服务", titleMs: "Perkhidmatan Berkualiti" },
+                  { icon: <Users className="w-6 h-6" />, titleEn: "Reliable Workforce", titleZh: "可靠劳动力", titleMs: "Tenaga Kerja Boleh Dipercayai" },
+                  { icon: <Clock className="w-6 h-6" />, titleEn: "Timely Deployment", titleZh: "按时部署", titleMs: "Penghantaran Tepat Masa" },
+                  { icon: <TrendingUp className="w-6 h-6" />, titleEn: "Driving Your Business Forward", titleZh: "推动您的业务发展", titleMs: "Memacu Perniagaan Anda" },
                 ].map((item, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <div className="bg-white/20 p-2.5 rounded-lg flex-shrink-0">
                       {item.icon}
                     </div>
-                    <div>
-                      <span className="font-semibold text-sm block">{item.title}</span>
-                      <span className="text-teal-200 text-xs">{(item as any).titleZh}</span>
-                    </div>
+                    <span className="font-semibold text-sm">{t(item.titleEn, item.titleZh, item.titleMs)}</span>
                   </div>
                 ))}
               </div>
@@ -1635,13 +1709,15 @@ export default function Home() {
             <div className="bg-white/10 p-8 rounded-2xl border border-white/20">
               <div className="text-5xl text-white/30 font-serif leading-none mb-4">"</div>
               <p className="text-lg leading-relaxed">
-                Delivering reliable, compliant and quality workforce solutions that drive your business forward.
+                {t(
+                  "Delivering reliable, compliant and quality workforce solutions that drive your business forward.",
+                  "提供可靠、合规且高质量的劳动力解决方案，推动您的业务向前发展。",
+                  "Menyampaikan penyelesaian tenaga kerja yang boleh dipercayai, patuh dan berkualiti tinggi."
+                )}
               </p>
-              <p className="text-base text-teal-100 mt-2">提供可靠、合规且高质量的劳动力解决方案，推动您的业务向前发展。</p>
-              <p className="text-sm text-teal-200 mt-1">Menyampaikan penyelesaian tenaga kerja yang boleh dipercayai, patuh dan berkualiti tinggi.</p>
               <div className="mt-6 pt-6 border-t border-white/20">
                 <p className="font-bold">YAVOREN SERVICES SDN. BHD.</p>
-                <p className="text-sm text-teal-100">YOUR PARTNER IN PROGRESS · 您的发展伙伴 · Rakan Kemajuan Anda</p>
+                <p className="text-sm text-teal-100">{t("YOUR PARTNER IN PROGRESS", "您的发展伙伴", "Rakan Kemajuan Anda")}</p>
               </div>
             </div>
           </div>
@@ -1667,36 +1743,28 @@ export default function Home() {
                   <span className="font-bold text-sm">YAVOREN SERVICES</span>
                 </div>
               </div>
-              <p className="text-gray-400 text-sm">Your trusted partner for comprehensive workforce solutions.</p>
-              <p className="text-gray-500 text-xs mt-0.5">您全面劳动力解决方案的信赖伙伴</p>
-              <p className="text-gray-600 text-xs mt-0.5">Rakan kongsi dipercayai anda untuk penyelesaian tenaga kerja yang komprehensif.</p>
+              <p className="text-gray-400 text-sm">{t("Your trusted partner for comprehensive workforce solutions.", "您全面劳动力解决方案的信赖伙伴", "Rakan kongsi dipercayai anda untuk penyelesaian tenaga kerja yang komprehensif.")}</p>
             </div>
             <div>
-              <h4 className="font-bold mb-1 text-sm">Services</h4>
-              <p className="text-gray-500 text-xs mb-0.5">服务</p>
-              <p className="text-gray-600 text-xs mb-3">Perkhidmatan</p>
+              <h4 className="font-bold mb-3 text-sm">{t("Services", "服务", "Perkhidmatan")}</h4>
               <ul className="text-gray-400 text-sm space-y-2">
-                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">Temporary Staffing</a></li>
-                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">Permanent Recruitment</a></li>
-                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">Skilled Labour Supply</a></li>
-                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">Training Services</a></li>
+                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">{t("Temporary Staffing", "临时用工", "Kakitangan Sementara")}</a></li>
+                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">{t("Permanent Recruitment", "永久招聘", "Pengambilan Tetap")}</a></li>
+                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">{t("Skilled Labour Supply", "技术工人供应", "Bekalan Buruh Mahir")}</a></li>
+                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">{t("Training Services", "培训服务", "Perkhidmatan Latihan")}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-1 text-sm">Company</h4>
-              <p className="text-gray-500 text-xs mb-0.5">公司</p>
-              <p className="text-gray-600 text-xs mb-3">Syarikat</p>
+              <h4 className="font-bold mb-3 text-sm">{t("Company", "公司", "Syarikat")}</h4>
               <ul className="text-gray-400 text-sm space-y-2">
-                <li><a href="#about" className="hover:text-[#0E8B8B] transition-colors">About Us</a></li>
-                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">Our Services</a></li>
-                <li><a href="#projects" className="hover:text-[#0E8B8B] transition-colors">Projects</a></li>
-                <li><a href="#contact" className="hover:text-[#0E8B8B] transition-colors">Contact</a></li>
+                <li><a href="#about" className="hover:text-[#0E8B8B] transition-colors">{t("About Us", "公司简介", "Tentang Kami")}</a></li>
+                <li><a href="#services" className="hover:text-[#0E8B8B] transition-colors">{t("Our Services", "我们的服务", "Perkhidmatan Kami")}</a></li>
+                <li><a href="#projects" className="hover:text-[#0E8B8B] transition-colors">{t("Projects", "项目", "Projek")}</a></li>
+                <li><a href="#contact" className="hover:text-[#0E8B8B] transition-colors">{t("Contact", "联系", "Hubungi")}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-1 text-sm">Contact</h4>
-              <p className="text-gray-500 text-xs mb-0.5">联系方式</p>
-              <p className="text-gray-600 text-xs mb-3">Hubungi Kami</p>
+              <h4 className="font-bold mb-3 text-sm">{t("Contact", "联系方式", "Hubungi Kami")}</h4>
               <div className="space-y-2 text-gray-400 text-sm">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#0E8B8B]" />
@@ -1710,7 +1778,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm space-y-1">
-            <p>&copy; 2026 YAVOREN SERVICES SDN. BHD. All rights reserved. · 版权所有 · Hak Cipta Terpelihara</p>
+            <p>&copy; 2026 YAVOREN SERVICES SDN. BHD. {t("All rights reserved.", "版权所有。", "Hak Cipta Terpelihara.")}</p>
             <p className="text-gray-500 text-xs">SSM No. 202501048526 &nbsp;&middot;&nbsp; Registered in Malaysia</p>
           </div>
         </div>
