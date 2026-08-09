@@ -1443,7 +1443,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="inline-block bg-[#0E8B8B] text-white px-4 py-2 rounded-full text-sm font-semibold">
-                {t("WORKFORCE SOLUTIONS", "劳动力解决方案", "Penyelesaian Tenaga Kerja")}
+                {t("WORKFORCE & CLEANING SOLUTIONS", "劳动力与清洁解决方案", "Penyelesaian Tenaga Kerja & Pembersihan")}
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-[#2D3748] leading-tight">
                 {language === "en" ? (
@@ -1456,9 +1456,9 @@ export default function Home() {
               </h1>
               <p className="text-lg text-[#718096] leading-relaxed">
                 {t(
-                  "Delivering reliable, professional, and innovative workforce solutions that create value and build lasting partnerships.",
-                  "提供可靠、专业且创新的劳动力解决方案，创造价値并建立持久合作关系。",
-                  "Menyampaikan penyelesaian tenaga kerja yang boleh dipercayai, profesional dan inovatif."
+                  "Delivering reliable manpower solutions and professional cleaning services — your trusted partner for a productive and spotless workplace.",
+                  "提供可靠的人力资源解决方案及专业清洁服务——您值得信赖的生产力与整洁工作场所伙伴。",
+                  "Menyampaikan penyelesaian tenaga kerja yang boleh dipercayai dan perkhidmatan pembersihan profesional — rakan kongsi dipercayai anda."
                 )}
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
@@ -1469,10 +1469,10 @@ export default function Home() {
                   {t("Get Started", "立即开始", "Mulakan")} <ChevronRight className="w-4 h-4 ml-2" />
                 </a>
                 <a
-                  href="#services"
+                  href="#cleaning"
                   className="inline-flex items-center border-2 border-[#0E8B8B] text-[#0E8B8B] hover:bg-[#F7FAFC] px-6 py-3 rounded-lg font-semibold transition-colors"
                 >
-                  {t("Our Services", "我们的服务", "Perkhidmatan Kami")}
+                  {t("Cleaning Services", "清洁服务", "Perkhidmatan Pembersihan")}
                 </a>
               </div>
             </div>
