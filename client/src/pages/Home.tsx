@@ -28,6 +28,16 @@ import {
   Award,
   Globe,
   ChevronDown,
+  Sparkles,
+  Droplets,
+  Wrench,
+  Zap,
+  Home as HomeIcon,
+  Factory,
+  Grid3x3,
+  HardHat,
+  Waves,
+  SunMedium,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -193,6 +203,120 @@ const projectMilestones: ProjectMilestone[] = [
     client: "Nulatex Sdn. Bhd.",
     endClient: "Nulatex Sdn. Bhd.",
     pax: 50,
+  },
+];
+
+interface CleaningService {
+  id: number;
+  title: string;
+  titleZh: string;
+  titleMs: string;
+  points: string[];
+  pointsZh: string[];
+  pointsMs: string[];
+  icon: React.ReactNode;
+}
+
+const cleaningServices: CleaningService[] = [
+  {
+    id: 1,
+    title: "General Cleaning",
+    titleZh: "一般清洁",
+    titleMs: "Pembersihan Umum",
+    points: ["Sweeping & mopping", "Dust removal", "Bins collection", "Offices, shop lots, facilities & common areas"],
+    pointsZh: ["扫地与拖地", "除尘", "垃圾收集", "办公室、店铺、设施及公共区域"],
+    pointsMs: ["Menyapu & mengemop", "Penyingkiran habuk", "Pengumpulan tong sampah", "Pejabat, lot kedai, kemudahan & kawasan awam"],
+    icon: <Sparkles className="w-7 h-7" />,
+  },
+  {
+    id: 2,
+    title: "Deep Cleaning",
+    titleZh: "深度清洁",
+    titleMs: "Pembersihan Mendalam",
+    points: ["Intensive cleaning", "Removes stubborn dirt, grease & buildup", "Disinfection available", "High-traffic areas"],
+    pointsZh: ["深度清洁", "去除顽固污垢、油脂及积垢", "可提供消毒服务", "高流量区域"],
+    pointsMs: ["Pembersihan intensif", "Membuang kotoran degil, gris & mendapan", "Disinfeksi tersedia", "Kawasan trafik tinggi"],
+    icon: <Droplets className="w-7 h-7" />,
+  },
+  {
+    id: 3,
+    title: "Factory Deep Cleaning",
+    titleZh: "工厂深度清洁",
+    titleMs: "Pembersihan Mendalam Kilang",
+    points: ["Heavy-duty cleaning", "Oil, grease & grime removal", "Machinery & surrounding area cleaning", "Improves safety & hygiene"],
+    pointsZh: ["重型清洁", "去除油污、油脂及污垢", "机械及周围区域清洁", "提升安全与卫生"],
+    pointsMs: ["Pembersihan berat", "Penyingkiran minyak, gris & kotoran", "Pembersihan mesin & kawasan sekitar", "Meningkatkan keselamatan & kebersihan"],
+    icon: <Factory className="w-7 h-7" />,
+  },
+  {
+    id: 4,
+    title: "Tile & Grout Cleaning",
+    titleZh: "瓷砖及填缝清洁",
+    titleMs: "Pembersihan Jubin & Grout",
+    points: ["Deep clean tiles & grout", "Removes black stains & dirt", "Restores clean & fresh appearance"],
+    pointsZh: ["深度清洁瓷砖及填缝", "去除黑斑及污垢", "恢复干净清新外观"],
+    pointsMs: ["Bersihkan jubin & grout secara mendalam", "Membuang noda hitam & kotoran", "Memulihkan penampilan bersih & segar"],
+    icon: <Grid3x3 className="w-7 h-7" />,
+  },
+  {
+    id: 5,
+    title: "Post Renovation Cleaning",
+    titleZh: "装修后清洁",
+    titleMs: "Pembersihan Pasca Renovasi",
+    points: ["Dust, cement, paint & debris removal", "Handover-ready cleaning", "Residential & commercial"],
+    pointsZh: ["清除灰尘、水泥、油漆及碎屑", "交屋前清洁", "住宅及商业"],
+    pointsMs: ["Penyingkiran habuk, simen, cat & puing", "Pembersihan sedia untuk serah terima", "Kediaman & komersial"],
+    icon: <HardHat className="w-7 h-7" />,
+  },
+  {
+    id: 6,
+    title: "Floor Scrubbing (Machine)",
+    titleZh: "机器地板刷洗",
+    titleMs: "Penggesekan Lantai (Mesin)",
+    points: ["Machine scrub & vacuum", "Removes dirt, stains & oil residue", "Suitable for tile, concrete, epoxy & industrial floors"],
+    pointsZh: ["机器刷洗及吸尘", "去除污垢、污渍及油渍", "适用于瓷砖、混凝土、环氧树脂及工业地板"],
+    pointsMs: ["Gosok mesin & vakum", "Membuang kotoran, noda & sisa minyak", "Sesuai untuk jubin, konkrit, epoksi & lantai industri"],
+    icon: <Wrench className="w-7 h-7" />,
+  },
+  {
+    id: 7,
+    title: "Warehouse Cleaning",
+    titleZh: "仓库清洁",
+    titleMs: "Pembersihan Gudang",
+    points: ["Floor cleaning & dust control", "Aisle, racking & loading bay cleaning", "Keeps your warehouse clean, safe & presentable"],
+    pointsZh: ["地板清洁及除尘", "通道、货架及装卸区清洁", "保持仓库整洁、安全及整齐"],
+    pointsMs: ["Pembersihan lantai & kawalan habuk", "Pembersihan lorong, rak & teluk muatan", "Menjaga gudang anda bersih, selamat & kemas"],
+    icon: <Building2 className="w-7 h-7" />,
+  },
+  {
+    id: 8,
+    title: "Pressure Washing",
+    titleZh: "高压清洗",
+    titleMs: "Basuhan Tekanan Tinggi",
+    points: ["High pressure cleaning", "Removes dirt, oil, moss & tough stains", "Outdoor area, floor, wall & equipment"],
+    pointsZh: ["高压清洗", "去除污垢、油污、苔藓及顽固污渍", "户外区域、地板、墙壁及设备"],
+    pointsMs: ["Pembersihan tekanan tinggi", "Membuang kotoran, minyak, lumut & noda degil", "Kawasan luar, lantai, dinding & peralatan"],
+    icon: <Waves className="w-7 h-7" />,
+  },
+  {
+    id: 9,
+    title: "Floor Polishing & Shine Restoration",
+    titleZh: "地板抛光及光泽修复",
+    titleMs: "Penggilap Lantai & Pemulihan Kilat",
+    points: ["Polishing for tile, terrazzo, marble & stone", "Restores shine", "Enhances floor appearance"],
+    pointsZh: ["瓷砖、水磨石、大理石及石材抛光", "恢复光泽", "提升地板外观"],
+    pointsMs: ["Penggilap untuk jubin, terrazzo, marmar & batu", "Memulihkan kilat", "Meningkatkan penampilan lantai"],
+    icon: <SunMedium className="w-7 h-7" />,
+  },
+  {
+    id: 10,
+    title: "Shutdown & Special Cleaning",
+    titleZh: "停工及特殊清洁",
+    titleMs: "Pembersihan Penutupan & Khas",
+    points: ["Support during plant shutdown", "Equipment area cleaning", "Customised cleaning based on your needs"],
+    pointsZh: ["工厂停工期间的支持", "设备区域清洁", "根据需求定制清洁方案"],
+    pointsMs: ["Sokongan semasa penutupan loji", "Pembersihan kawasan peralatan", "Pembersihan disesuaikan mengikut keperluan anda"],
+    icon: <Zap className="w-7 h-7" />,
   },
 ];
 
@@ -1235,6 +1359,7 @@ export default function Home() {
           <nav className="hidden md:flex items-center gap-6">
             <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("About", "公司", "Syarikat")}</a>
             <a href="#services" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Services", "服务", "Perkhidmatan")}</a>
+            <a href="#cleaning" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Cleaning", "清洁", "Pembersihan")}</a>
             <a href="#projects" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Projects", "项目", "Projek")}</a>
             <a href="#testimonials" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Clients", "客户", "Pelanggan")}</a>
             <a href="#contact" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Contact", "联系", "Hubungi")}</a>
@@ -1259,6 +1384,7 @@ export default function Home() {
             {[
               { id: "about", en: "About", zh: "公司", ms: "Syarikat" },
               { id: "services", en: "Services", zh: "服务", ms: "Perkhidmatan" },
+              { id: "cleaning", en: "Cleaning", zh: "清洁", ms: "Pembersihan" },
               { id: "projects", en: "Projects", zh: "项目", ms: "Projek" },
               { id: "testimonials", en: "Clients", zh: "客户", ms: "Pelanggan" },
               { id: "contact", en: "Contact", zh: "联系", ms: "Hubungi" },
@@ -1474,7 +1600,91 @@ export default function Home() {
       </section>
 
       {/* Project Timeline Section */}
-      <section id="projects" className="py-16 md:py-24 bg-white">
+      {/* Cleaning Services Section */}
+      <section id="cleaning" className="py-16 md:py-24 bg-white">
+        <div className="container">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <div className="inline-block bg-[#0E8B8B] text-white px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+              {t("HOME & INDUSTRIAL CLEANING SERVICES & SUPPLIES", "家居及工业清洁服务与供应", "Perkhidmatan & Bekalan Pembersihan Rumah & Industri")}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-3">
+              {language === "en" ? (
+                <>Complete <span className="text-[#0E8B8B]">Cleaning Solutions</span></>
+              ) : language === "zh" ? (
+                <>完整<span className="text-[#0E8B8B]">清洁解决方案</span></>
+              ) : (
+                <>Penyelesaian <span className="text-[#0E8B8B]">Pembersihan Lengkap</span></>
+              )}
+            </h2>
+            <p className="text-[#718096] max-w-2xl mx-auto italic font-medium">
+              {t("Cleaner Space. Safer Workplace. Better Impression.", "更洁净的空间。更安全的工作场所。更好的印象。", "Ruang Lebih Bersih. Tempat Kerja Lebih Selamat. Impresi Lebih Baik.")}
+            </p>
+          </div>
+
+          {/* Why Choose Yavoren Cleaning */}
+          <div className="bg-[#F7FAFC] rounded-2xl p-6 mb-10 border border-gray-100">
+            <div className="grid sm:grid-cols-2 md:grid-cols-5 gap-4 text-center">
+              {[
+                { icon: <Shield className="w-5 h-5" />, en: "Professional & Trained Team", zh: "专业及受训团队", ms: "Pasukan Profesional & Terlatih" },
+                { icon: <Wrench className="w-5 h-5" />, en: "Modern Equipment & Technology", zh: "现代设备与技术", ms: "Peralatan & Teknologi Moden" },
+                { icon: <CheckCircle className="w-5 h-5" />, en: "Safe Work Practices", zh: "安全工作规范", ms: "Amalan Kerja Selamat" },
+                { icon: <Award className="w-5 h-5" />, en: "Reliable & Quality Service", zh: "可靠优质服务", ms: "Perkhidmatan Boleh Dipercayai & Berkualiti" },
+                { icon: <Target className="w-5 h-5" />, en: "Customised Solutions", zh: "定制化解决方案", ms: "Penyelesaian Disesuaikan" },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div className="bg-[#0E8B8B] text-white p-2.5 rounded-full">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-semibold text-[#2D3748]">{t(item.en, item.zh, item.ms)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Cleaning Service Cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {cleaningServices.map((svc) => {
+              const pts = language === "zh" ? svc.pointsZh : language === "ms" ? svc.pointsMs : svc.points;
+              return (
+                <div key={svc.id} className="bg-[#F7FAFC] rounded-xl border border-gray-100 hover:border-[#0E8B8B]/40 hover:shadow-md transition-all p-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-[#0E8B8B] text-white p-2.5 rounded-lg flex-shrink-0">
+                      {svc.icon}
+                    </div>
+                    <h3 className="font-bold text-[#2D3748] text-sm leading-tight">{t(svc.title, svc.titleZh, svc.titleMs)}</h3>
+                  </div>
+                  <ul className="space-y-1">
+                    {pts.map((pt, j) => (
+                      <li key={j} className="flex items-start gap-2 text-xs text-[#718096]">
+                        <CheckCircle className="w-3.5 h-3.5 text-[#0E8B8B] flex-shrink-0 mt-0.5" />
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CTA Banner */}
+          <div className="bg-[#0E8B8B] text-white rounded-2xl p-8 text-center">
+            <p className="text-xl font-bold mb-1">{t("FREE SITE INSPECTION", "免费现场检查", "PEMERIKSAAN TAPAK PERCUMA")}</p>
+            <p className="text-teal-100 text-sm mb-4">{t("We Clean. You Focus. That's the Yavoren Promise.", "我们清洁，您专注。这是亚沃伦的承诺。", "Kami Bersihkan. Anda Fokus. Itulah Janji Yavoren.")}</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="tel:+601115556106" className="inline-flex items-center justify-center gap-2 bg-white text-[#0E8B8B] px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-teal-50 transition-colors">
+                <Phone className="w-4 h-4" /> 011 - 1555 6106
+              </a>
+              <a href="https://wa.me/601115556106" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-[#20bd5a] transition-colors">
+                {t("WhatsApp Us", "WhatsApp联系", "WhatsApp Kami")}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Timeline Section */}
+      <section id="projects" className="py-16 md:py-24 bg-[#F7FAFC]">
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#2D3748] mb-2">
