@@ -1356,11 +1356,33 @@ export default function Home() {
               className="h-12 w-auto object-contain"
             />
           </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("About", "公司", "Syarikat")}</a>
-            <a href="#services" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Services", "服务", "Perkhidmatan")}</a>
-            <a href="#cleaning" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Cleaning", "清洁", "Pembersihan")}</a>
-            <a href="#projects" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Projects", "项目", "Projek")}</a>
+            <nav className="hidden md:flex items-center gap-6">
+              <a href="#about" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("About", "公司", "Syarikat")}</a>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-1 text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">
+                  {t("Services", "服务", "Perkhidmatan")}
+                  <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-52">
+                <DropdownMenuLabel className="text-xs text-gray-400 font-normal">{t("Choose a service category", "选择服务类别", "Pilih kategori perkhidmatan")}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <a href="#services" className="block">
+                  <div className="flex items-center gap-2 px-2 py-2 rounded-sm hover:bg-[#0E8B8B]/10 cursor-pointer text-sm text-[#2D3748] hover:text-[#0E8B8B] transition-colors">
+                    <Users className="w-4 h-4 text-[#0E8B8B]" />
+                    {t("Manpower Services", "人力资源服务", "Perkhidmatan Tenaga Kerja")}
+                  </div>
+                </a>
+                <a href="#cleaning" className="block">
+                  <div className="flex items-center gap-2 px-2 py-2 rounded-sm hover:bg-[#0E8B8B]/10 cursor-pointer text-sm text-[#2D3748] hover:text-[#0E8B8B] transition-colors">
+                    <Sparkles className="w-4 h-4 text-[#0E8B8B]" />
+                    {t("Cleaning Services", "清洁服务", "Perkhidmatan Pembersihan")}
+                  </div>
+                </a>
+              </DropdownMenuContent>
+            </DropdownMenu>
+              <a href="#projects" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Projects", "项目", "Projek")}</a>
             <a href="#testimonials" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Clients", "客户", "Pelanggan")}</a>
             <a href="#contact" className="text-[#2D3748] hover:text-[#0E8B8B] transition-colors text-sm font-medium">{t("Contact", "联系", "Hubungi")}</a>
             <LanguageSwitcher />
@@ -1383,8 +1405,6 @@ export default function Home() {
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3">
             {[
               { id: "about", en: "About", zh: "公司", ms: "Syarikat" },
-              { id: "services", en: "Services", zh: "服务", ms: "Perkhidmatan" },
-              { id: "cleaning", en: "Cleaning", zh: "清洁", ms: "Pembersihan" },
               { id: "projects", en: "Projects", zh: "项目", ms: "Projek" },
               { id: "testimonials", en: "Clients", zh: "客户", ms: "Pelanggan" },
               { id: "contact", en: "Contact", zh: "联系", ms: "Hubungi" },
@@ -1398,6 +1418,18 @@ export default function Home() {
                 {t(en, zh, ms)}
               </a>
             ))}
+            {/* Services sub-items */}
+            <div className="border-t border-gray-100 pt-2">
+              <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">{t("Services", "服务", "Perkhidmatan")}</p>
+              <a href="#services" className="flex items-center gap-2 text-[#2D3748] hover:text-[#0E8B8B] transition-colors font-medium py-1" onClick={() => setMobileMenuOpen(false)}>
+                <Users className="w-4 h-4 text-[#0E8B8B]" />
+                {t("Manpower Services", "人力资源服务", "Perkhidmatan Tenaga Kerja")}
+              </a>
+              <a href="#cleaning" className="flex items-center gap-2 text-[#2D3748] hover:text-[#0E8B8B] transition-colors font-medium py-1" onClick={() => setMobileMenuOpen(false)}>
+                <Sparkles className="w-4 h-4 text-[#0E8B8B]" />
+                {t("Cleaning Services", "清洁服务", "Perkhidmatan Pembersihan")}
+              </a>
+            </div>
             <div className="pt-2 border-t border-gray-100">
               <LanguageSwitcher className="w-full justify-center" />
             </div>
