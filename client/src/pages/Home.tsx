@@ -418,6 +418,8 @@ const industries: Industry[] = [
   { name: "Telecommunications Infrastructure", nameZh: "电信基础设施", nameMs: "Infrastruktur Telekomunikasi", icon: <Users className="w-8 h-8" /> },
   { name: "Electronics Manufacturing", nameZh: "电子制造业", nameMs: "Pembuatan Elektronik", icon: <TrendingUp className="w-8 h-8" /> },
   { name: "Commercial Buildings", nameZh: "商业建筑", nameMs: "Bangunan Komersial", icon: <Users className="w-8 h-8" /> },
+  { name: "Commercial Cleaning", nameZh: "商业清洁", nameMs: "Pembersihan Komersial", icon: <Sparkles className="w-8 h-8" /> },
+  { name: "Industrial Facilities", nameZh: "工业设施", nameMs: "Kemudahan Industri", icon: <Factory className="w-8 h-8" /> },
 ];
 
 const benefits: Benefit[] = [
@@ -718,6 +720,7 @@ function ContactSection() {
     service: "",
     message: "",
   });
+  const [serviceCategory, setServiceCategory] = useState<"" | "manpower" | "cleaning">("");
 
   const submitMutation = trpc.contact.submit.useMutation({
     onSuccess: () => {
@@ -889,15 +892,31 @@ function ContactSection() {
                   className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E8B8B]/20 focus:border-[#0E8B8B] bg-white text-gray-700"
                 >
                   <option value="">Select a service… · 选择服务 · Pilih perkhidmatan…</option>
-                  <option value="Temporary Staffing">Temporary Staffing</option>
-                  <option value="Permanent Recruitment">Permanent Recruitment</option>
-                  <option value="Skilled Labour Supply">Skilled Labour Supply</option>
-                  <option value="Unskilled Labour Supply">Unskilled Labour Supply</option>
-                  <option value="Workforce Management">Workforce Management</option>
-                  <option value="On-Site Supervision">On-Site Supervision</option>
-                  <option value="Training Services">Training Services</option>
-                  <option value="Labor Accommodation">Labor Accommodation</option>
-                  <option value="General Enquiry">General Enquiry</option>
+                  <optgroup label="── Manpower Services ──">
+                    <option value="Temporary Staffing">Temporary Staffing</option>
+                    <option value="Permanent Recruitment">Permanent Recruitment</option>
+                    <option value="Skilled Labour Supply">Skilled Labour Supply</option>
+                    <option value="Unskilled Labour Supply">Unskilled Labour Supply</option>
+                    <option value="Workforce Management">Workforce Management</option>
+                    <option value="On-Site Supervision">On-Site Supervision</option>
+                    <option value="Training Services">Training Services</option>
+                    <option value="Labor Accommodation">Labor Accommodation</option>
+                  </optgroup>
+                  <optgroup label="── Cleaning Services ──">
+                    <option value="General Cleaning">General Cleaning</option>
+                    <option value="Deep Cleaning">Deep Cleaning</option>
+                    <option value="Factory Deep Cleaning">Factory Deep Cleaning</option>
+                    <option value="Tile & Grout Cleaning">Tile &amp; Grout Cleaning</option>
+                    <option value="Post Renovation Cleaning">Post Renovation Cleaning</option>
+                    <option value="Floor Scrubbing (Machine)">Floor Scrubbing (Machine)</option>
+                    <option value="Warehouse Cleaning">Warehouse Cleaning</option>
+                    <option value="Pressure Washing">Pressure Washing</option>
+                    <option value="Floor Polishing & Shine Restoration">Floor Polishing &amp; Shine Restoration</option>
+                    <option value="Shutdown & Special Cleaning">Shutdown &amp; Special Cleaning</option>
+                  </optgroup>
+                  <optgroup label="──────────────────">
+                    <option value="General Enquiry">General Enquiry</option>
+                  </optgroup>
                 </select>
               </div>
 
