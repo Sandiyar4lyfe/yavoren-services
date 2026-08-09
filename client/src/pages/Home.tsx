@@ -1524,11 +1524,11 @@ export default function Home() {
               </h2>
               <p className="text-[#718096] leading-relaxed">
                 {language === "en" ? (
-                  <>Founded in 2022, <strong className="text-[#0E8B8B]">Skill Birds Services</strong> began as a reputable labour supply company, committed to delivering reliable and efficient manpower solutions. Building on a strong foundation and growing client trust, the company evolved into <strong className="text-[#0E8B8B]">Yavoren Services</strong>, expanding its capabilities beyond labour supply to include a wider range of service solutions.</>
+                  <>Founded in 2022, <strong className="text-[#0E8B8B]">YAVOREN Services Sdn. Bhd.</strong> began as a reputable labour supply company, committed to delivering reliable and efficient manpower solutions. Building on a strong foundation and growing client trust, the company expanded its capabilities beyond labour supply to include a wider range of workforce and cleaning service solutions.</>
                 ) : language === "zh" ? (
-                  <>公司于2022年创立，最初以《技鸟服务》为名，致力提供可靠高效的劳动力解决方案。随着业务发展，公司正式更名为《亚沃伦服务》。</>
+                  <>公司于2022年创立，<strong className="text-[#0E8B8B]">亚沃伦服务有限公司</strong>致力提供可靠高效的劳动力解决方案，并不断扩展服务范围，涵盖更广泛的劳动力及清洁服务。</>
                 ) : (
-                  <>Diasaskan pada 2022 sebagai <strong className="text-[#0E8B8B]">Skill Birds Services</strong>, syarikat ini berkembang menjadi <strong className="text-[#0E8B8B]">Yavoren Services</strong>.</>
+                  <>Diasaskan pada 2022, <strong className="text-[#0E8B8B]">YAVOREN Services Sdn. Bhd.</strong> bermula sebagai syarikat bekalan tenaga kerja yang bereputasi, komited untuk menyampaikan penyelesaian tenaga kerja yang boleh dipercayai dan cekap, serta terus berkembang merangkumi perkhidmatan pembersihan.</>
                 )}
               </p>
               <p className="text-[#718096] leading-relaxed">
@@ -1556,7 +1556,7 @@ export default function Home() {
                     <h3 className="text-xl font-bold mb-2">{t("OUR VISION", "我们的愿景", "Visi Kami")}</h3>
                     <p className="text-sm leading-relaxed text-teal-50">
                       {t(
-                        "In line with our founding objectives, SKILL BIRDS pledges to offer our clients the best and competitive services and solution related to local / foreign workers in MALAYSIA. We aspire to be a Centre of excellence, pioneering and applying the best practices in the industry within the boundary of law.",
+                        "YAVOREN Services pledges to offer our clients the best and competitive services and solutions related to local / foreign workers and cleaning services in Malaysia. We aspire to be a centre of excellence, pioneering and applying the best practices in the industry within the boundary of law.",
                         "我们致力为客户提供马来西亚本地及外籍劳工的最佳竞争力服务，并在法律框架内引领行业最佳实践。",
                         "Kami berhasrat menjadi pusat kecemerlangan, memelopori amalan terbaik industri dalam sempadan undang-undang."
                       )}
@@ -1697,6 +1697,61 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Photo Gallery */}
+          <div className="mb-10">
+            <h3 className="text-xl font-bold text-[#2D3748] mb-6 text-center">
+              {t("Our Work in Action", "我们的清洁成果", "Hasil Kerja Kami")}
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              {/* Before & After */}
+              <div className="rounded-xl overflow-hidden shadow-md">
+                <img
+                  src="/manus-storage/cleaning-before-after_6ce5ee4c.jpeg"
+                  alt="Before and After Cleaning Results"
+                  className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+                />
+                <div className="bg-[#2D3748] text-white px-4 py-2 text-sm font-semibold text-center">
+                  {t("Before & After — Clean Results You Can See!", "清洁前后对比 — 效果一目了然！", "Sebelum & Selepas — Hasil Bersih Yang Jelas!")}
+                </div>
+              </div>
+              {/* Services Overview */}
+              <div className="rounded-xl overflow-hidden shadow-md">
+                <img
+                  src="/manus-storage/cleaning-services-overview_c7e471a7.jpeg"
+                  alt="Cleaning Services Overview"
+                  className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+                />
+                <div className="bg-[#2D3748] text-white px-4 py-2 text-sm font-semibold text-center">
+                  {t("Factory · Warehouse · Office · Residential", "工厂 · 仓库 · 办公室 · 住宅", "Kilang · Gudang · Pejabat · Kediaman")}
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* Equipment */}
+              <div className="rounded-xl overflow-hidden shadow-md">
+                <img
+                  src="/manus-storage/cleaning-equipment_dd422492.jpeg"
+                  alt="Professional Cleaning Equipment"
+                  className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
+                />
+                <div className="bg-[#0E8B8B] text-white px-4 py-2 text-sm font-semibold text-center">
+                  {t("Equipped. Trained. Ready to Clean.", "专业设备，训练有素，随时就绪。", "Dilengkapi. Terlatih. Bersedia Untuk Membersih.")}
+                </div>
+              </div>
+              {/* Service List */}
+              <div className="rounded-xl overflow-hidden shadow-md">
+                <img
+                  src="/manus-storage/cleaning-service-list_14d81df3.jpeg"
+                  alt="Complete Cleaning Service List"
+                  className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
+                />
+                <div className="bg-[#0E8B8B] text-white px-4 py-2 text-sm font-semibold text-center">
+                  {t("Professional Cleaning Solutions For Every Need", "专业清洁解决方案，满足各类需求", "Penyelesaian Pembersihan Profesional Untuk Setiap Keperluan")}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* CTA Banner */}
