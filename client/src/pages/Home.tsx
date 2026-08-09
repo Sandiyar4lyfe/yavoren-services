@@ -1487,12 +1487,30 @@ export default function Home() {
                 >
                   {t("Get Started", "立即开始", "Mulakan")} <ChevronRight className="w-4 h-4 ml-2" />
                 </a>
-                <a
-                  href="#cleaning"
-                  className="inline-flex items-center border-2 border-[#0E8B8B] text-[#0E8B8B] hover:bg-[#F7FAFC] px-6 py-3 rounded-lg font-semibold transition-colors"
-                >
-                  {t("Cleaning Services", "清洁服务", "Perkhidmatan Pembersihan")}
-                </a>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="inline-flex items-center gap-2 border-2 border-[#0E8B8B] text-[#0E8B8B] hover:bg-[#F7FAFC] px-6 py-3 rounded-lg font-semibold transition-colors">
+                      {t("Services", "服务", "Perkhidmatan")}
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-52">
+                    <DropdownMenuLabel className="text-xs text-gray-400 font-normal">{t("Choose a service", "选择服务", "Pilih perkhidmatan")}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <a href="#services">
+                      <div className="flex items-center gap-2 px-2 py-2 rounded-sm hover:bg-[#0E8B8B]/10 cursor-pointer text-sm text-[#2D3748] hover:text-[#0E8B8B] transition-colors">
+                        <Users className="w-4 h-4 text-[#0E8B8B]" />
+                        {t("Manpower Services", "人力资源服务", "Perkhidmatan Tenaga Kerja")}
+                      </div>
+                    </a>
+                    <a href="#cleaning">
+                      <div className="flex items-center gap-2 px-2 py-2 rounded-sm hover:bg-[#0E8B8B]/10 cursor-pointer text-sm text-[#2D3748] hover:text-[#0E8B8B] transition-colors">
+                        <Sparkles className="w-4 h-4 text-[#0E8B8B]" />
+                        {t("Cleaning Services", "清洁服务", "Perkhidmatan Pembersihan")}
+                      </div>
+                    </a>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
             <div className="relative h-96 md:h-full rounded-2xl overflow-hidden shadow-xl">
